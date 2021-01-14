@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
 
 import ProductItem from "../ProductItem";
+import { idbPromise } from "../../utils/helpers";
 import { QUERY_PRODUCTS } from "../../utils/queries";
 import spinner from "../../assets/spinner.gif";
 import { useStoreContext } from "../../utils/GlobalState";
@@ -15,12 +16,26 @@ function ProductList() {
 
   useEffect(() => {
     if (data) {
+      // store the products in global state
       dispatch({
         type: UPDATE_PRODUCTS,
         products: data.products,
       });
+
+      // store the products in indexedDB
+      data.products.forEach((product) => {
+        idbPromise("products", "put", product);
+      });
+    } else if (!loading) {
+      // store products from indexedDB to global state
+      idbPromise("products", "get").then((products) => {
+        dispatch({
+          type: UPDATE_PRODUCTS,
+          products: products,
+        });
+      });
     }
-  }, [data, dispatch]);
+  }, [data, loading, dispatch]);
 
   function filterProducts() {
     if (!currentCategory) {

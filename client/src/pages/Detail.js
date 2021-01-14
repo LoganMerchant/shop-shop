@@ -4,6 +4,7 @@ import { useQuery } from "@apollo/react-hooks";
 
 import spinner from "../assets/spinner.gif";
 import Cart from "../components/Cart";
+import { idbPromise } from "../utils/helpers";
 import { QUERY_PRODUCTS } from "../utils/queries";
 import { useStoreContext } from "../utils/GlobalState";
 import {
@@ -48,15 +49,31 @@ function Detail() {
   };
 
   useEffect(() => {
+    // if global store has products
     if (products.length) {
       setCurrentProduct(products.find((product) => product._id === id));
-    } else if (data) {
+    }
+    // if data is returned from query
+    else if (data) {
       dispatch({
         type: UPDATE_PRODUCTS,
         products: data.products,
       });
+
+      data.products.forEach((product) => {
+        idbPromise("products", "put", product);
+      });
     }
-  }, [products, data, dispatch, id]);
+    // if there is no internet connection
+    else if (!loading) {
+      idbPromise("products", "get").then((indexedProducts) => {
+        dispatch({
+          type: UPDATE_PRODUCTS,
+          products: indexedProducts,
+        });
+      });
+    }
+  }, [products, data, loading, dispatch, id]);
 
   return (
     <>
