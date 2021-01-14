@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+
+import Cart from "../components/Cart";
 import ProductList from "../components/ProductList";
 import CategoryMenu from "../components/CategoryMenu";
 
@@ -7,6 +9,7 @@ const Home = () => {
     <div className="container">
       <CategoryMenu />
       <ProductList />
+      <Cart />
     </div>
   );
 };
