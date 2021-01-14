@@ -20,7 +20,11 @@ const Cart = () => {
       sum += item.price * item.purchaseQuantity;
     });
 
-    return sum.toFixed(2);
+    if (!sum) {
+      return "0.00";
+    } else {
+      return sum.toFixed(2);
+    }
   }
 
   if (!state.cartOpen) {
