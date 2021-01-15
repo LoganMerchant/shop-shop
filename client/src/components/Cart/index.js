@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import "./style.css";
 import CartItem from "../CartItem";
 import Auth from "../../utils/auth";
-import { TOGGLE_CART } from "../../utils/actions";
+import { idbPromise } from "../../utils/helpers";
+import { TOGGLE_CART, ADD_MULTIPLE_TO_CART } from "../../utils/actions";
 import { useStoreContext } from "../../utils/GlobalState";
 
 const Cart = () => {
   const [state, dispatch] = useStoreContext();
+
+  useEffect(() => {
+    async function getCart() {
+      const cart = await idbPromise("cart", "get");
+
+      dispatch({ type: ADD_MULTIPLE_TO_CART, products: [...cart] });
+    }
+
+    if (!state.cart.length) {
+      getCart();
+    }
+  }, [state.cart.length, dispatch]);
 
   function toggleCart() {
     dispatch({ type: TOGGLE_CART });
