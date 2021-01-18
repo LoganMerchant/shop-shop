@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
+import { useSelector, useDispatch } from "react-redux";
 
 import spinner from "../assets/spinner.gif";
 import Cart from "../components/Cart";
 import { idbPromise } from "../utils/helpers";
 import { QUERY_PRODUCTS } from "../utils/queries";
-import { useStoreContext } from "../utils/GlobalState";
 import {
   UPDATE_PRODUCTS,
   REMOVE_FROM_CART,
@@ -15,8 +15,13 @@ import {
 } from "../utils/actions";
 
 function Detail() {
-  const [state, dispatch] = useStoreContext();
-  const { products, cart } = state;
+  const dispatch = useDispatch();
+  
+  const selectProducts = (state) => state.products.products;
+  const products = useSelector(selectProducts);
+
+  const selectCart = (state) => state.cart.cart;
+  const cart = useSelector(selectCart);
 
   const { id } = useParams();
 
@@ -25,7 +30,7 @@ function Detail() {
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
   const addToCart = () => {
-    const itemInCart = state.cart.find((cartItem) => cartItem._id === id);
+    const itemInCart = cart.find((cartItem) => cartItem._id === id);
 
     if (itemInCart) {
       // Increment the item's quantity in the cart

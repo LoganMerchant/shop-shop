@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
   UPDATE_CATEGORIES,
   UPDATE_CURRENT_CATEGORY,
 } from "../../utils/actions";
 import { idbPromise } from "../../utils/helpers";
-import { useStoreContext } from "../../utils/GlobalState";
 import { QUERY_CATEGORIES } from "../../utils/queries";
 
 function CategoryMenu() {
-  const [state, dispatch] = useStoreContext();
-  const { categories } = state;
+  const dispatch = useDispatch();
+
+  const selectCategories = (state) => state.categories.categories;
+  const categories = useSelector(selectCategories);
 
   const { data: categoryData, loading } = useQuery(QUERY_CATEGORIES);
 
