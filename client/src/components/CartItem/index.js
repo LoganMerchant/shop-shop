@@ -5,6 +5,7 @@ import { idbPromise } from "../../utils/helpers";
 import { REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from "../../utils/actions";
 
 const CartItem = ({ item }) => {
+  // Allows for the updating of global store.
   const dispatch = useDispatch();
 
   const removeFromCart = (item) => {
@@ -16,6 +17,7 @@ const CartItem = ({ item }) => {
     idbPromise("cart", "delete", { ...item });
   };
 
+  // Handles user input for manipulation of cart item's purchase quantity
   const onChange = (evt) => {
     const value = evt.target.value;
 
@@ -40,6 +42,7 @@ const CartItem = ({ item }) => {
     }
   };
 
+  // JSX
   return (
     <div className="flex-row">
       <div>

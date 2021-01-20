@@ -6,8 +6,10 @@ import { ADD_ORDER } from "../utils/mutations";
 import { idbPromise } from "../utils/helpers";
 
 const Success = () => {
+  // Used to call the mutation
   const [addOrder] = useMutation(ADD_ORDER);
 
+  // Saves the cart data to the `orders` page and remove it from indexedDB
   useEffect(() => {
     async function saveOrder() {
       const cart = await idbPromise("cart", "get");

@@ -12,6 +12,7 @@ const initialState = {
   cartOpen: false,
 };
 
+// Reducer functions for the cart
 export default function cartReducer(state = initialState, action) {
   switch (action.type) {
     case ADD_TO_CART:

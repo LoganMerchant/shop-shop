@@ -15,18 +15,20 @@ import {
 } from "../utils/actions";
 
 function Detail() {
+  // Allows for manipulation of global store
   const dispatch = useDispatch();
-  
-  const selectProducts = (state) => state.products.products;
-  const products = useSelector(selectProducts);
 
-  const selectCart = (state) => state.cart.cart;
-  const cart = useSelector(selectCart);
+  // Allows the use of the global store's `products` & `cart`
+  const products = useSelector((state) => state.products.products);
+  const cart = useSelector((state) => state.cart.cart);
 
+  // Pulls the id from the URL parameter
   const { id } = useParams();
 
+  // Set the local state for current product
   const [currentProduct, setCurrentProduct] = useState({});
 
+  // Variables for the server's query response
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
   const addToCart = () => {
@@ -68,6 +70,7 @@ function Detail() {
     idbPromise("cart", "delete", { ...currentProduct });
   };
 
+  // Used to get products from server, saving products to indexedDB and setting them in global state
   useEffect(() => {
     // if global store has products
     if (products.length) {
@@ -95,6 +98,7 @@ function Detail() {
     }
   }, [products, data, loading, dispatch, id]);
 
+  // JSX for Detail page
   return (
     <>
       {currentProduct ? (

@@ -8,6 +8,7 @@ const initialState = {
   currentCategory: "",
 };
 
+// Reducer functions for categories
 export default function categoriesReducer(state = initialState, action) {
   switch (action.type) {
     case UPDATE_CATEGORIES:

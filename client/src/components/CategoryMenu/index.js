@@ -10,13 +10,16 @@ import { idbPromise } from "../../utils/helpers";
 import { QUERY_CATEGORIES } from "../../utils/queries";
 
 function CategoryMenu() {
+  // Allows the updating of global store
   const dispatch = useDispatch();
+  
+  // Allows the use of `categories` from global store
+  const categories = useSelector((state) => state.categories.categories);
 
-  const selectCategories = (state) => state.categories.categories;
-  const categories = useSelector(selectCategories);
-
+  // Variables for querying server for category data
   const { data: categoryData, loading } = useQuery(QUERY_CATEGORIES);
 
+  // Determines where to get category data from
   useEffect(() => {
     // if categoryData exists or has changed from the response of useQuery, then run dispatch()
     if (categoryData) {
@@ -38,6 +41,7 @@ function CategoryMenu() {
     }
   }, [categoryData, loading, dispatch]);
 
+  // Filters products by user click
   const handleClick = (id) => {
     dispatch({
       type: UPDATE_CURRENT_CATEGORY,

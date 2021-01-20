@@ -13,15 +13,17 @@ import { TOGGLE_CART, ADD_MULTIPLE_TO_CART } from "../../utils/actions";
 const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
 
 const Cart = () => {
+  // Allows editing of global store
   const dispatch = useDispatch();
-  const selectCart = (state) => state.cart.cart;
-  const globalCart = useSelector(selectCart);
 
-  const selectCartOpen = (state) => state.cartOpen.cartOpen;
-  const globalCartOpen = useSelector(selectCartOpen);
+  // Allows the use of `cart` and `cartOpen` from global store
+  const globalCart = useSelector((state) => state.cart.cart);
+  const globalCartOpen = useSelector((state) => state.cartOpen.cartOpen);
 
+  // Allows the delayed query for checkout
   const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
 
+  // Check to see if there are saved items in indexedDB
   useEffect(() => {
     async function getCart() {
       const cart = await idbPromise("cart", "get");
@@ -34,6 +36,7 @@ const Cart = () => {
     }
   }, [globalCart.length, dispatch]);
 
+  // If the checkout query is fired by user, create Stripe checkout session
   useEffect(() => {
     if (data) {
       stripePromise.then((res) => {
@@ -46,6 +49,7 @@ const Cart = () => {
     dispatch({ type: TOGGLE_CART });
   }
 
+  // Get the cost for the items in the cart
   function calculateTotal() {
     let sum = 0;
 
@@ -60,6 +64,7 @@ const Cart = () => {
     }
   }
 
+  // Event listener for checkout that will fire off `getCheckout`
   function submitCheckout() {
     const productIds = [];
 
@@ -74,6 +79,7 @@ const Cart = () => {
     });
   }
 
+  // JSX
   if (!globalCartOpen) {
     return (
       <div className="cart-closed" onClick={toggleCart}>

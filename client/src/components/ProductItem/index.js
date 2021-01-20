@@ -6,11 +6,14 @@ import { ADD_TO_CART, UPDATE_CART_QUANTITY } from "../../utils/actions";
 import { pluralize, idbPromise } from "../../utils/helpers";
 
 function ProductItem(item) {
+  // Destructure properties from `item` prop
   const { image, name, _id, price, quantity } = item;
   
+  // Allows the updating of global store
   const dispatch = useDispatch();
-  const selectCart = (state) => state.cart.cart;
-  const cart = useSelector(selectCart);
+
+  // Allows the use of global store's `cart`
+  const cart = useSelector(state=>state.cart.cart);
 
   const addToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === _id);

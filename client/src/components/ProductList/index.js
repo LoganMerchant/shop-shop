@@ -9,15 +9,19 @@ import spinner from "../../assets/spinner.gif";
 import { UPDATE_PRODUCTS } from "../../utils/actions";
 
 function ProductList() {
+  // Allows the updating of global store
   const dispatch = useDispatch();
-  const selectCurrentCategory = (state) => state.currentCategory.currentCategory;
-  const currentCategory = useSelector(selectCurrentCategory);
 
-  const selectProducts = (state) => state.products.products;
-  const products = useSelector(selectProducts);
+  // Allows the use of global store's `currentCategory` & `products`
+  const products = useSelector((state) => state.products.products);
+  const currentCategory = useSelector(
+    (state) => state.currentCategory.currentCategory
+  );
 
+  // Queries server for product data
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
+  // Determine where to get product data from
   useEffect(() => {
     if (data) {
       // store the products in global state
@@ -41,6 +45,7 @@ function ProductList() {
     }
   }, [data, loading, dispatch]);
 
+  // Filters products based on `currentCategory`
   function filterProducts() {
     if (!currentCategory) {
       return products;
@@ -51,6 +56,7 @@ function ProductList() {
     );
   }
 
+  // JSX
   return (
     <div className="my-2">
       <h2>Our Products:</h2>
