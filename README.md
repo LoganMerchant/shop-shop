@@ -1,4 +1,4 @@
-[![License Badge](https://img.shields.io/badge/License-GNU_AGPLv3-blueviolet.svg)](https://shields.io/)
+[![License Badge](https://img.shields.io/badge/License-MIT_License-blueviolet.svg)](https://shields.io/)
 
 # Shop-Shop
 
